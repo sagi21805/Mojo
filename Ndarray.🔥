@@ -1,12 +1,23 @@
 from Array import Array
 from time import now
+from memory.unsafe import Pointer
 
 
 struct Ndarray:
     var dims: Array
+    var ndim: Int
+    var data: Pointer[Array]
+    var size: Int
 
     fn __init__(inout self, dims: Array) raises:
         self.dims = Array(dims)
+        self.ndim = dims.size
+        
+        for dim in range(self.ndim):
+            self.size += dims[dim]
+
+        
+
     
 
 
