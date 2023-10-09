@@ -1,0 +1,67 @@
+from memory.unsafe import Pointer
+from time import now
+
+struct Array:
+    var data: Pointer[Int]
+    var size: Int
+    var value: Int
+    # creates empty array 
+    fn __init__(inout self, size: Int):
+        self.size = size
+        self.data = Pointer[Int].alloc(self.size)
+        self.value = 0
+    
+        for i in range(self.size):
+            self.data.store(i, 0)
+    
+    fn __init__(inout self, size: Int, val: Int):
+        self.size = size
+        self.data = Pointer[Int].alloc(self.size)
+        self.value = 0
+    
+        for i in range(self.size):
+            self.data.store(i, val)
+  
+  
+
+    fn __del__(owned self):
+        self.data.free()
+
+    fn __getitem__(self, i: Int) raises -> Int:
+        if i >= self.size:
+            raise Error("out of bounds")
+        else:
+            return self.data.load(i)
+    
+    fn __setitem__(self, i: Int, val: Int) raises:
+        if i >= self.size:
+            raise Error("out of bounds")
+        else:
+            self.data.store(i, val)
+
+    fn __len__(inout self) -> Int:
+        return self.size
+
+
+    fn print(self):
+        print_no_newline("[")
+        for i in range(self.size):
+            if i > 0:
+                print_no_newline(", ")
+            print_no_newline(self.data.load(i))
+        print("]")
+    
+    
+    
+    
+fn main() raises:
+    var arr: Array = Array(3)
+    
+    arr.print()
+    print(arr.__len__())
+
+    let c = 'v'
+
+    # var o = Pointer[String]()
+    # o = o.alloc(10)
+        
