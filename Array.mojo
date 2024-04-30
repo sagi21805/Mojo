@@ -1,5 +1,7 @@
 from memory.unsafe import Pointer
 from time import now
+from python import Python
+
 
 struct Array:
     var data: Pointer[Int]
@@ -44,16 +46,14 @@ struct Array:
             self.data.store(i, val)
 
     fn print(self):
-        print_no_newline("[")
-        for i in range(self.size):
-            if i > 0:
-                print_no_newline(", ")
-            print_no_newline(self.data.load(i))
-        print("]")
+        print("[", end = "")
+        for i in range(self.size-1):
+            print(self.data.load(i), end = ", ")
+        print(self.data.load(self.size-1), end = "]")
 
     fn __add__(self, arr: Array) raises -> Array:
         if self.size == arr.size:
-            let new = Array(self.size)
+            var new = Array(self.size)
             for i in range(self.size):
                 new[i] = self[i] + arr[i]
         
@@ -64,7 +64,7 @@ struct Array:
 
     fn __mul__(self, arr: Array) raises -> Array:
         if self.size == arr.size:
-            let new = Array(self.size)
+            var new = Array(self.size)
             for i in range(self.size):
                 new[i] = self[i] * arr[i]
         
@@ -74,7 +74,7 @@ struct Array:
             raise Error("arrays are not on the same length")
 
     fn __add__(self, scalar: Int) raises -> Array:
-        let new = Array(self.size)
+        var new = Array(self.size)
         for i in range(self.size):
             new[i] = self[i] + scalar
     
@@ -82,7 +82,7 @@ struct Array:
         
 
     fn __mul__(self, scalar: Int) raises -> Array:
-        let new = Array(self.size)
+        var new = Array(self.size)
         for i in range(self.size):
             new[i] = self[i] * scalar
     
@@ -93,13 +93,13 @@ struct Array:
     
     
 fn main() raises:
-    let arr: Array = Array(14, 32)
+    var arr: Array = Array(1000000, 10)
     
-    let arr2 = Array(14, 100)
+    var arr2 = Array(1000000, 3)
 
-    let arr3 = arr * arr2 
-    let arr4 = (arr3 + 1) * 20
-    arr4.print()
+    var arr3 = arr * arr2 
+    var arr4 = (arr3 + 1) * 20
+    print(arr4[arr4.size-1])
 
     # var o = Pointer[String]()
     # o = o.alloc(10)
